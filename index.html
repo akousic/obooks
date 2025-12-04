@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OBooks - Working Version</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: Arial, sans-serif;
+            background: #0a0e27;
+            color: white;
+            min-height: 100vh;
+        }
+        .header {
+            background: #1a1f3a;
+            padding: 20px;
+            border-bottom: 1px solid #2a2f4a;
+        }
+        .content {
+            padding: 40px;
+        }
+        .fab {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 40px;
+            color: white;
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+            z-index: 100;
+        }
+        .fab:hover {
+            transform: scale(1.1);
+        }
+        .drawer-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            z-index: 200;
+        }
+        .drawer-overlay.active {
+            display: block;
+        }
+        .drawer {
+            position: fixed;
+            top: 0;
+            right: -500px;
+            width: 450px;
+            height: 100vh;
+            background: #1a1f3a;
+            transition: right 0.3s ease;
+            z-index: 201;
+            padding: 30px;
+            overflow-y: auto;
+        }
+        .drawer-overlay.active .drawer {
+            right: 0;
+        }
+        .drawer h2 {
+            margin-bottom: 20px;
+            color: #667eea;
+        }
+        .template {
+            background: #2a2f4a;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        .template:hover {
+            background: #3a3f5a;
+            border-color: #667eea;
+        }
+        .template h3 {
+            margin-bottom: 5px;
+        }
+        .template p {
+            color: #999;
+            font-size: 14px;
+        }
+        .close-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📚 OBooks</h1>
+    </div>
+    
+    <div class="content">
+        <h2>My Books</h2>
+        <p>Click the + button to create a new book</p>
+    </div>
+    
+    <!-- FAB Button -->
+    <button class="fab" onclick="openDrawer()">+</button>
+    
+    <!-- Drawer -->
+    <div id="drawer" class="drawer-overlay" onclick="if(event.target === this) closeDrawer()">
+        <div class="drawer">
+            <h2>Choose Template</h2>
+            
+            <div class="template" onclick="selectTemplate('Ruled')">
+                <h3>📝 Ruled</h3>
+                <p>Classic lined paper</p>
+            </div>
+            
+            <div class="template" onclick="selectTemplate('Grid')">
+                <h3>📊 Grid</h3>
+                <p>Perfect for diagrams</p>
+            </div>
+            
+            <div class="template" onclick="selectTemplate('Dot Grid')">
+                <h3>⚫ Dot Grid</h3>
+                <p>Subtle dots for flexible layouts</p>
+            </div>
+            
+            <div class="template" onclick="selectTemplate('Blank')">
+                <h3>📄 Blank</h3>
+                <p>Clean blank pages</p>
+            </div>
+            
+            <button class="close-btn" onclick="closeDrawer()">Close</button>
+        </div>
+    </div>
+    
+    <script>
+        console.log('Script loaded!');
+        
+        function openDrawer() {
+            console.log('Opening drawer...');
+            document.getElementById('drawer').classList.add('active');
+        }
+        
+        function closeDrawer() {
+            console.log('Closing drawer...');
+            document.getElementById('drawer').classList.remove('active');
+        }
+        
+        function selectTemplate(name) {
+            alert('Selected: ' + name);
+            closeDrawer();
+        }
+        
+        console.log('Ready! Click the + button.');
+    </script>
+</body>
+</html>

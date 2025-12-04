@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OBooks Debug Test</title>
+</head>
+<body>
+    <h1>Debug Test</h1>
+    <button id="test-fab">Test FAB Click</button>
+    <div id="output"></div>
+
+    <script>
+        // Test if scripts are loading
+        console.log('Test page loaded');
+        
+        // Check if Storage is available
+        setTimeout(() => {
+            const output = document.getElementById('output');
+            
+            if (typeof Storage !== 'undefined') {
+                output.innerHTML += '<p>✅ Storage module loaded</p>';
+                
+                const books = Storage.getBooks();
+                output.innerHTML += `<p>Books count: ${books.length}</p>`;
+                
+                if (books.length === 0) {
+                    output.innerHTML += '<p>Creating sample books...</p>';
+                    Storage.createSampleBooks();
+                    const newBooks = Storage.getBooks();
+                    output.innerHTML += `<p>Books after creation: ${newBooks.length}</p>`;
+                }
+            } else {
+                output.innerHTML += '<p>❌ Storage module NOT loaded</p>';
+            }
+            
+            if (typeof Components !== 'undefined') {
+                output.innerHTML += '<p>✅ Components module loaded</p>';
+            } else {
+                output.innerHTML += '<p>❌ Components module NOT loaded</p>';
+            }
+            
+            if (typeof window.app !== 'undefined') {
+                output.innerHTML += '<p>✅ App initialized</p>';
+            } else {
+                output.innerHTML += '<p>❌ App NOT initialized</p>';
+            }
+        }, 1000);
+        
+        document.getElementById('test-fab').addEventListener('click', () => {
+            alert('FAB clicked!');
+        });
+    </script>
+</body>
+</html>

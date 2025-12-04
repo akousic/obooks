@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OBooks - Simple Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #0a0e27;
+            color: white;
+            padding: 40px;
+        }
+        .fab {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 30px;
+            color: white;
+        }
+        .drawer {
+            position: fixed;
+            top: 0;
+            right: -500px;
+            width: 400px;
+            height: 100vh;
+            background: #1a1f3a;
+            transition: right 0.3s;
+            padding: 20px;
+        }
+        .drawer.open {
+            right: 0;
+        }
+        .template {
+            background: #2a2f4a;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .template:hover {
+            background: #3a3f5a;
+        }
+    </style>
+</head>
+<body>
+    <h1>OBooks - Simple Test</h1>
+    <p id="status">Click the + button to test the drawer</p>
+    
+    <button class="fab" onclick="openDrawer()">+</button>
+    
+    <div id="drawer" class="drawer">
+        <h2>Templates</h2>
+        <div class="template" onclick="alert('Ruled selected')">📝 Ruled</div>
+        <div class="template" onclick="alert('Grid selected')">📊 Grid</div>
+        <div class="template" onclick="alert('Dot Grid selected')">⚫ Dot Grid</div>
+        <div class="template" onclick="alert('Blank selected')">📄 Blank</div>
+        <button onclick="closeDrawer()" style="margin-top: 20px; padding: 10px 20px;">Close</button>
+    </div>
+
+    <script>
+        console.log('Script loaded!');
+        
+        function openDrawer() {
+            console.log('Opening drawer...');
+            document.getElementById('drawer').classList.add('open');
+            document.getElementById('status').textContent = 'Drawer opened!';
+        }
+        
+        function closeDrawer() {
+            console.log('Closing drawer...');
+            document.getElementById('drawer').classList.remove('open');
+            document.getElementById('status').textContent = 'Drawer closed. Click + to reopen.';
+        }
+        
+        console.log('Ready!');
+    </script>
+</body>
+</html>
