@@ -1,40 +1,72 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>OBooks - Working Version</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OBooks</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
             background: #0a0e27;
             color: white;
             min-height: 100vh;
         }
         .header {
             background: #1a1f3a;
-            padding: 20px;
+            padding: 20px 40px;
             border-bottom: 1px solid #2a2f4a;
+        }
+        .header h1 {
+            font-size: 24px;
         }
         .content {
             padding: 40px;
         }
-        .fab {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 70px;
-            height: 70px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 40px;
-            color: white;
-            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
-            z-index: 100;
+        .content h2 {
+            margin-bottom: 20px;
         }
-        .fab:hover {
-            transform: scale(1.1);
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 24px;
+            margin-top: 20px;
+        }
+        .book-card {
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .book-card:hover {
+            transform: translateY(-4px);
+        }
+        .book-cover {
+            aspect-ratio: 3/4;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: box-shadow 0.2s;
+        }
+        .book-card:hover .book-cover {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        }
+        .create-cover {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+        }
+        .plus-icon {
+            font-size: 64px;
+            color: white;
+            font-weight: 300;
+            line-height: 1;
+        }
+        .create-text {
+            color: white;
+            margin-top: 12px;
+            font-size: 14px;
+            opacity: 0.9;
         }
         .drawer-overlay {
             position: fixed;
@@ -43,59 +75,104 @@
             width: 100vw;
             height: 100vh;
             background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
             display: none;
             z-index: 200;
         }
         .drawer-overlay.active {
-            display: block;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
         }
         .drawer {
-            position: fixed;
-            top: 0;
-            right: -500px;
             width: 450px;
+            max-width: 90vw;
             height: 100vh;
             background: #1a1f3a;
-            transition: right 0.3s ease;
-            z-index: 201;
             padding: 30px;
             overflow-y: auto;
-        }
-        .drawer-overlay.active .drawer {
-            right: 0;
+            box-shadow: -4px 0 20px rgba(0, 0, 0, 0.5);
         }
         .drawer h2 {
             margin-bottom: 20px;
             color: #667eea;
+            font-size: 22px;
         }
         .template {
             background: #2a2f4a;
-            padding: 20px;
-            margin: 15px 0;
+            padding: 18px;
+            margin: 12px 0;
             border-radius: 10px;
             cursor: pointer;
             border: 2px solid transparent;
+            transition: all 0.2s;
         }
         .template:hover {
             background: #3a3f5a;
+            transform: translateX(-4px);
+        }
+        .template.selected {
             border-color: #667eea;
+            background: #3a3f5a;
         }
         .template h3 {
             margin-bottom: 5px;
+            font-size: 18px;
         }
         .template p {
             color: #999;
             font-size: 14px;
         }
-        .close-btn {
-            background: #667eea;
-            color: white;
+        hr {
+            margin: 30px 0;
             border: none;
-            padding: 12px 30px;
+            border-top: 1px solid #2a2f4a;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #999;
+            font-size: 14px;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            background: #2a2f4a;
+            border: 1px solid #3a3f5a;
             border-radius: 8px;
-            cursor: pointer;
-            margin-top: 20px;
+            color: white;
             font-size: 16px;
+            margin-bottom: 16px;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin-bottom: 10px;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        .btn-secondary {
+            background: #3a3f5a;
+            color: white;
+        }
+        .btn-secondary:hover {
+            background: #4a4f6a;
         }
     </style>
 </head>
@@ -106,50 +183,53 @@
     
     <div class="content">
         <h2>My Books</h2>
-        <p>Click the + button to create a new book</p>
+        <div class="books-grid">
+            <!-- Create New Book Card -->
+            <div class="book-card create-card" id="createBookCard">
+                <div class="book-cover create-cover">
+                    <div class="plus-icon">+</div>
+                    <div class="create-text">Create New Book</div>
+                </div>
+            </div>
+        </div>
     </div>
     
-    <!-- FAB Button -->
-    <button class="fab" onclick="openDrawer()">+</button>
-    
     <!-- Drawer -->
-    <div id="drawer" class="drawer-overlay" onclick="if(event.target === this) closeDrawer()">
+    <div id="drawer" class="drawer-overlay">
         <div class="drawer">
             <h2>Choose Template</h2>
             
-            <div class="template" onclick="selectTemplate('Ruled')">
+            <div class="template" data-template="ruled">
                 <h3>📝 Ruled</h3>
                 <p>Classic lined paper</p>
             </div>
             
-            <div class="template" onclick="selectTemplate('Grid')">
+            <div class="template" data-template="grid">
                 <h3>📊 Grid</h3>
                 <p>Perfect for diagrams</p>
             </div>
             
-            <div class="template" onclick="selectTemplate('Dot Grid')">
+            <div class="template" data-template="dot">
                 <h3>⚫ Dot Grid</h3>
                 <p>Subtle dots for flexible layouts</p>
             </div>
             
-            <div class="template" onclick="selectTemplate('Blank')">
+            <div class="template" data-template="blank">
                 <h3>📄 Blank</h3>
                 <p>Clean blank pages</p>
             </div>
             
-            <hr style="margin: 30px 0; border: 1px solid #2a2f4a;">
+            <hr>
             
             <h2>Book Details</h2>
-            <div style="margin: 20px 0;">
-                <label style="display: block; margin-bottom: 8px; color: #999;">Book Title</label>
-                <input type="text" id="bookTitle" placeholder="My Awesome Book" 
-                       style="width: 100%; padding: 12px; background: #2a2f4a; border: 1px solid #3a3f5a; border-radius: 8px; color: white; font-size: 16px;">
+            <div>
+                <label>Book Title</label>
+                <input type="text" id="bookTitle" placeholder="My Awesome Book">
             </div>
             
-            <div style="margin: 20px 0;">
-                <label style="display: block; margin-bottom: 8px; color: #999;">Number of Pages</label>
-                <select id="pageCount" 
-                        style="width: 100%; padding: 12px; background: #2a2f4a; border: 1px solid #3a3f5a; border-radius: 8px; color: white; font-size: 16px; cursor: pointer;">
+            <div>
+                <label>Number of Pages</label>
+                <select id="pageCount">
                     <option value="20">20 pages</option>
                     <option value="50" selected>50 pages</option>
                     <option value="100">100 pages</option>
@@ -158,44 +238,42 @@
                 </select>
             </div>
             
-            <button class="close-btn" onclick="createBook()" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); width: 100%;">
-                Create Book
-            </button>
-            <button class="close-btn" onclick="closeDrawer()" style="background: #3a3f5a; width: 100%; margin-top: 10px;">
-                Cancel
-            </button>
+            <button class="btn btn-primary" id="createBtn">Create Book</button>
+            <button class="btn btn-secondary" id="cancelBtn">Cancel</button>
         </div>
     </div>
     
     <script>
-        console.log('Script loaded!');
+        console.log('=== SCRIPT LOADED ===');
         
         let selectedTemplate = null;
         
-        function openDrawer() {
-            console.log('Opening drawer...');
-            document.getElementById('drawer').classList.add('active');
-        }
+        // Create book card
+        const createCard = document.getElementById('createBookCard');
+        const drawer = document.getElementById('drawer');
         
-        function closeDrawer() {
-            console.log('Closing drawer...');
-            document.getElementById('drawer').classList.remove('active');
-            document.getElementById('bookTitle').value = '';
-            selectedTemplate = null;
-            document.querySelectorAll('.template').forEach(t => t.style.borderColor = 'transparent'); // Reset template highlighting
-        }
+        console.log('Create card:', createCard);
+        console.log('Drawer:', drawer);
         
-        function selectTemplate(name) {
-            selectedTemplate = name;
-            alert('Selected: ' + name + '\nNow enter book details below and click Create Book');
-            // Highlight selected template
-            document.querySelectorAll('.template').forEach(t => t.style.borderColor = 'transparent');
-            event.target.closest('.template').style.borderColor = '#667eea';
-        }
+        createCard.addEventListener('click', function() {
+            console.log('CREATE CARD CLICKED!');
+            drawer.classList.add('active');
+        });
         
-        function createBook() {
+        // Template selection
+        document.querySelectorAll('.template').forEach(template => {
+            template.addEventListener('click', function() {
+                document.querySelectorAll('.template').forEach(t => t.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedTemplate = this.dataset.template;
+                console.log('Template selected:', selectedTemplate);
+            });
+        });
+        
+        // Create book
+        document.getElementById('createBtn').addEventListener('click', function() {
             const title = document.getElementById('bookTitle').value.trim();
-            const pageCount = document.getElementById('pageCount').value;
+            const pages = document.getElementById('pageCount').value;
             
             if (!title) {
                 alert('Please enter a book title');
@@ -203,15 +281,32 @@
             }
             
             if (!selectedTemplate) {
-                alert('Please select a template first');
+                alert('Please select a template');
                 return;
             }
             
-            alert(`Book Created!\n\nTitle: ${title}\nTemplate: ${selectedTemplate}\nPages: ${pageCount}`);
-            closeDrawer();
-        }
+            alert(`✅ Book Created!\n\nTitle: ${title}\nTemplate: ${selectedTemplate}\nPages: ${pages}`);
+            
+            // Reset and close
+            document.getElementById('bookTitle').value = '';
+            selectedTemplate = null;
+            document.querySelectorAll('.template').forEach(t => t.classList.remove('selected'));
+            drawer.classList.remove('active');
+        });
         
-        console.log('Ready! Click the + button.');
+        // Cancel button
+        document.getElementById('cancelBtn').addEventListener('click', function() {
+            drawer.classList.remove('active');
+        });
+        
+        // Click outside to close
+        drawer.addEventListener('click', function(e) {
+            if (e.target === drawer) {
+                drawer.classList.remove('active');
+            }
+        });
+        
+        console.log('=== READY ===');
     </script>
 </body>
 </html>
