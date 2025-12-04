@@ -137,12 +137,40 @@
                 <p>Clean blank pages</p>
             </div>
             
-            <button class="close-btn" onclick="closeDrawer()">Close</button>
+            <hr style="margin: 30px 0; border: 1px solid #2a2f4a;">
+            
+            <h2>Book Details</h2>
+            <div style="margin: 20px 0;">
+                <label style="display: block; margin-bottom: 8px; color: #999;">Book Title</label>
+                <input type="text" id="bookTitle" placeholder="My Awesome Book" 
+                       style="width: 100%; padding: 12px; background: #2a2f4a; border: 1px solid #3a3f5a; border-radius: 8px; color: white; font-size: 16px;">
+            </div>
+            
+            <div style="margin: 20px 0;">
+                <label style="display: block; margin-bottom: 8px; color: #999;">Number of Pages</label>
+                <select id="pageCount" 
+                        style="width: 100%; padding: 12px; background: #2a2f4a; border: 1px solid #3a3f5a; border-radius: 8px; color: white; font-size: 16px; cursor: pointer;">
+                    <option value="20">20 pages</option>
+                    <option value="50" selected>50 pages</option>
+                    <option value="100">100 pages</option>
+                    <option value="150">150 pages</option>
+                    <option value="200">200 pages</option>
+                </select>
+            </div>
+            
+            <button class="close-btn" onclick="createBook()" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); width: 100%;">
+                Create Book
+            </button>
+            <button class="close-btn" onclick="closeDrawer()" style="background: #3a3f5a; width: 100%; margin-top: 10px;">
+                Cancel
+            </button>
         </div>
     </div>
     
     <script>
         console.log('Script loaded!');
+        
+        let selectedTemplate = null;
         
         function openDrawer() {
             console.log('Opening drawer...');
@@ -152,10 +180,34 @@
         function closeDrawer() {
             console.log('Closing drawer...');
             document.getElementById('drawer').classList.remove('active');
+            document.getElementById('bookTitle').value = '';
+            selectedTemplate = null;
+            document.querySelectorAll('.template').forEach(t => t.style.borderColor = 'transparent'); // Reset template highlighting
         }
         
         function selectTemplate(name) {
-            alert('Selected: ' + name);
+            selectedTemplate = name;
+            alert('Selected: ' + name + '\nNow enter book details below and click Create Book');
+            // Highlight selected template
+            document.querySelectorAll('.template').forEach(t => t.style.borderColor = 'transparent');
+            event.target.closest('.template').style.borderColor = '#667eea';
+        }
+        
+        function createBook() {
+            const title = document.getElementById('bookTitle').value.trim();
+            const pageCount = document.getElementById('pageCount').value;
+            
+            if (!title) {
+                alert('Please enter a book title');
+                return;
+            }
+            
+            if (!selectedTemplate) {
+                alert('Please select a template first');
+                return;
+            }
+            
+            alert(`Book Created!\n\nTitle: ${title}\nTemplate: ${selectedTemplate}\nPages: ${pageCount}`);
             closeDrawer();
         }
         
